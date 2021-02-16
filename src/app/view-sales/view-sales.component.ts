@@ -42,15 +42,20 @@ export class ViewSalesComponent implements AfterViewInit {
     this.uploadFileService.getSalesData().subscribe(
       data => {
         this.vehicles = new Array();
-        let sales = new Array<Sales>();
+        let salesData = new Array<Sales>();
         JSON.parse(data).forEach(row => {
-          row.Price = this.utilsService.getCurrencyFormat(row.Price);
-          row.Date = this.utilsService.getDateFormat(row.Date);
-          sales.push(new Sales(row));
-          this.vehicles.push(row.Vehicle);
+          let sale = new Sales();
+          sale.dealNumber = row.DealNumber;
+          sale.customerName = row.CustomerName;
+          sale.dealershipName = row.DealershipName;
+          sale.vehicle = row.Vehicle;
+          sale.price = this.utilsService.getCurrencyFormat(row.Price);;
+          sale.date = this.utilsService.getDateFormat(row.Date);
+          salesData.push(sale);
+          this.vehicles.push(sale.vehicle);
         });
 
-        this.dataSource = new MatTableDataSource<Sales>(sales);
+        this.dataSource = new MatTableDataSource<Sales>(salesData);
         this.dataSource.paginator = this.paginator;
         this.vehicleSoldMost = this.utilsService.findMostFrequent(this.vehicles);
       },
@@ -60,4 +65,3 @@ export class ViewSalesComponent implements AfterViewInit {
     );
   }
 }
-
