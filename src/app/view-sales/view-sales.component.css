@@ -1,3 +1,11 @@
 table {
   width: 100%;
 }
+
+.mat-header-row .mat-header-cell {
+  padding-right: 10px;
+}
+
+.mat-cell {
+  padding-right: 10px;
+}
