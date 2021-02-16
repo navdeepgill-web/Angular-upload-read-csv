@@ -31,8 +31,4 @@ export class UtilsService {
     let pipe = new DatePipe('en-US'); // Use locale
     return pipe.transform(val, 'MM/dd/yyyy');
   }
-
-  clean(val) {
-    return val.trim().replace(/"/g, '');
-  }
 }
