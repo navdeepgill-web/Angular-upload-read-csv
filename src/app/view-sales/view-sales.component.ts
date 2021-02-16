@@ -12,7 +12,6 @@ import { MatPaginator } from "@angular/material/paginator";
   styleUrls: ["./view-sales.component.css"]
 })
 export class ViewSalesComponent implements AfterViewInit {
-  sales: any;
   private vehicles: any;
   vehicleSoldMost: any;
   dataSource: MatTableDataSource<Sales>;
@@ -42,7 +41,6 @@ export class ViewSalesComponent implements AfterViewInit {
   ngOnInit() {
     this.uploadFileService.getSalesData().subscribe(
       data => {
-        this.sales = new Array();
         this.vehicles = new Array();
         let sales = new Array<Sales>();
         JSON.parse(data).forEach(row => {
