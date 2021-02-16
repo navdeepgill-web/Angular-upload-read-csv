@@ -44,8 +44,6 @@ export class ViewSalesComponent implements AfterViewInit {
       data => {
         this.sales = new Array();
         this.vehicles = new Array();
-        console.log(data);
-
         let sales = new Array<Sales>();
         JSON.parse(data).forEach(row => {
           row.Price = this.utilsService.getCurrencyFormat(row.Price);
