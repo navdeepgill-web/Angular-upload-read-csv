@@ -10,8 +10,20 @@ export class UploadFileService {
     const fileReader = new FileReader();
     fileReader.onload = () => {
       const content = fileReader.result;
-      const data = (<string>content).split("\n").slice(1);
-      this.subject.next(data);
+      const rows = (<string>content).split("\n"); //.slice(1);
+      let data = [];
+      const headers = rows[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+      for (var i = 1; i < rows.length; i++) {
+        var obj = {};
+        var currentRow = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        for (var j = 0; j < headers.length; j++) {
+          headers[j] = headers[j].trim().replace(/"/g, '');
+          obj[headers[j]] = typeof (currentRow[j]) === "undefined" ? "" : currentRow[j].replace(/"/g, '');
+        }
+        data.push(obj);
+      }
+
+      this.subject.next(JSON.stringify(data));
     }
 
     fileReader.onerror = function () {
