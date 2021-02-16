@@ -5,4 +5,8 @@ export class Sales {
   vehicle: string;
   price: string;
   date: string;
+
+  constructor(data) {
+    Object.assign(this, data);
+  }
 }   
