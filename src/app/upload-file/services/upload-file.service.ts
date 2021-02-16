@@ -17,9 +17,15 @@ export class UploadFileService {
         var obj = {};
         var currentRow = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
         for (var j = 0; j < headers.length; j++) {
-          if (!headers[j] || headers[j] === "") return;
-          headers[j] = headers[j].trim().replace(/"/g, '');
-          obj[headers[j]] = !(currentRow[j]) ? "" : currentRow[j].replace(/"/g, '');      
+          if (headers[j] && headers[j] !== "") {
+            headers[j] = headers[j].trim().replace(/"/g, '');
+            if (currentRow[j]) { obj[headers[j]] = currentRow[j].replace(/"/g, ''); }
+            else { obj[headers[j]] = ""; }
+          }
+          else {
+            console.log("bad data");
+            return;
+          }
         }
         data.push(obj);
       }
