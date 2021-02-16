@@ -15,7 +15,7 @@ export class ViewSalesComponent implements AfterViewInit {
   sales: any;
   private vehicles: any;
   vehicleSoldMost: any;
-  dataSource: MatTableDataSource<any[]>;
+  dataSource: MatTableDataSource<Sales>;
   displayedColumns: string[] = [
     "dealNumber",
     "customerName",
@@ -44,46 +44,20 @@ export class ViewSalesComponent implements AfterViewInit {
       data => {
         this.sales = new Array();
         this.vehicles = new Array();
-        data.forEach(row => {
-          if (row) {
-            const columns = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            let sale = new Sales();
-            for (let i = 0; i < columns.length; i++) {
-              let col = columns[i];
-              if (typeof col === "undefined" || !col) return;
-              col = this.utilsService.clean(col);
+        console.log(data);
 
-              switch (i) {
-                case 0:
-                  sale.dealNumber = Number(col);
-                  break;
-                case 1:
-                  sale.customerName = col;
-                  break;
-                case 2:
-                  sale.dealershipName = col;
-                  break;
-                case 3:
-                  sale.vehicle = col;
-                  this.vehicles.push(col);
-                  break;
-                case 4:
-                  sale.price = this.utilsService.getCurrencyFormat(col);
-                  break;
-                case 5:
-                  sale.date = this.utilsService.getDateFormat(new Date(col));
-                  break;
-              }
-            }
-            this.sales.push(sale);
-          }
+        let sales = new Array<Sales>();
+        JSON.parse(data).forEach(row => {
+          row.Price = this.utilsService.getCurrencyFormat(row.Price);
+          console.log(row);
+          row.Date = this.utilsService.getDateFormat(row.Date);
+          sales.push(new Sales(row));
+          this.vehicles.push(row.Vehicle);
         });
 
-        this.dataSource = new MatTableDataSource<any[]>(this.sales);
+        this.dataSource = new MatTableDataSource<Sales>(sales);
         this.dataSource.paginator = this.paginator;
-        this.vehicleSoldMost = this.utilsService.findMostFrequent(
-          this.vehicles
-        );
+        this.vehicleSoldMost = this.utilsService.findMostFrequent(this.vehicles);
       },
       error => {
         console.log("Error: " + error);
@@ -91,3 +65,4 @@ export class ViewSalesComponent implements AfterViewInit {
     );
   }
 }
+
